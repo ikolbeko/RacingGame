@@ -139,6 +139,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 carAtLeft = true
                 carAtRight = false
             }
+            
+            if gameStatus == .over {
+                if let view = self.view {
+                    let menuScene = MenuScene (size: view.bounds.size)
+                    menuScene.scaleMode = .aspectFill
+                    view.presentScene(menuScene, transition: SKTransition.doorsCloseHorizontal(withDuration: TimeInterval(2)))
+                }
+            }
         }
     }
     
