@@ -10,14 +10,11 @@ import GameplayKit
 
 class GameScene: SKScene {
     
-    var player: SKSpriteNode!
-    var road1: SKSpriteNode!
-    var road2: SKSpriteNode!
-    var centerPoint: CGFloat!
-    var left: CGPoint!
-    var right: CGPoint!
-    var carAtRight = true
-    var carAtLeft = false
+    var player = SKSpriteNode(imageNamed: "whiteCar")
+    var road1 = SKSpriteNode(imageNamed: "road")
+    var road2 = SKSpriteNode(imageNamed: "road")
+    var carAtRight = false
+    var carAtLeft = true
     
     enum GameStatus {
         case idle
@@ -29,25 +26,19 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
         
-        centerPoint = self.frame.size.width / self.frame.size.height
-        left = CGPoint(x: self.size.width * 0.35, y: self.size.height * 0.15)
-        right = CGPoint(x: self.size.width * 0.65, y: self.size.height * 0.15)
         // Set road
-        road1 = SKSpriteNode(imageNamed: "road")
         road1.size = self.frame.size
         road1.anchorPoint = CGPoint(x: 0, y: 0)
         road1.position = CGPoint(x: 0, y: 0)
         addChild(road1)
         
-        road2 = SKSpriteNode(imageNamed: "road")
         road2.size = self.frame.size
         road2.anchorPoint = CGPoint(x: 0, y: 0)
         road2.position = CGPoint(x: 0, y: road1.size.height)
         addChild(road2)
         
-        player = SKSpriteNode(imageNamed: "whiteCar")
+        // Add player
         addChild(player)
-        
         shuffle()
     }
     
@@ -56,11 +47,11 @@ class GameScene: SKScene {
     }
     
     func moveScene() {
-        //make road move
+        // Make road move
         road1.position = CGPoint(x: road1.position.x, y: road1.position.y - 5)
         road2.position = CGPoint(x: road2.position.x, y: road2.position.y - 5)
         
-        //check road position
+        // Check road position
         if road1.position.y < -road1.size.height {
             road1.position = CGPoint(x: road1.position.x, y: road2.position.y + road2.size.height)
         }
@@ -73,11 +64,11 @@ class GameScene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for _ in touches {
             if carAtLeft {
-                player.position = right
+                player.position = CGPoint(x: self.size.width * 0.65, y: self.size.height * 0.15) // Right position
                 carAtLeft = false
                 carAtRight = true
             } else {
-                player.position = left
+                player.position = CGPoint(x: self.size.width * 0.35, y: self.size.height * 0.15) // Left position
                 carAtLeft = true
                 carAtRight = false
             }
@@ -86,7 +77,7 @@ class GameScene: SKScene {
     
     func shuffle() {
         gameStatus = .idle
-        player.position = CGPoint(x: self.size.width * 0.5, y: self.size.height * 0.15)
+        player.position = CGPoint(x: self.size.width * 0.35, y: self.size.height * 0.15)
     }
     
     func startGame() {
