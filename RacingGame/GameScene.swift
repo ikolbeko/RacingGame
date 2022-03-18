@@ -13,8 +13,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var player = SKSpriteNode(imageNamed: "whiteCar")
     var road1 = SKSpriteNode(imageNamed: "road")
     var road2 = SKSpriteNode(imageNamed: "road")
+    var metricLabel = SKLabelNode(text: "Score: 0")
+    var meters = 0
+    var gameSpeed = 8.0
     var carAtRight = false
     var carAtLeft = true
+    var score = 0 {
+        didSet {
+            metricLabel.text = "Score: \(score)"
+        }
+    }
+    
+    let carArray = [
+        "car1",
+        "car2",
+        "car3",
+        "car4",
+        "car5",
+        "car6",
+        "car7"
+    ]
+    
     
     var gameOverPicture = SKSpriteNode(imageNamed: "gameOver")
     
@@ -27,11 +46,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func didMove(to view: SKView) {
         
-        // Set physics
+        // Set Physics
         self.physicsBody = SKPhysicsBody (edgeLoopFrom: self.frame)
         self.physicsWorld.contactDelegate = self
         
-        // Set road
+        // Set Road
         road1.size = self.frame.size
         road1.zPosition = 1
         road1.anchorPoint = CGPoint(x: 0, y: 0)
@@ -46,11 +65,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         player.zPosition = 2
         
-        // Phusic configuration
+        // Phusic Configuration
         player.physicsBody = SKPhysicsBody(texture: player.texture!, size: player.size)
         player.physicsBody? .allowsRotation = false
         player.physicsBody? .categoryBitMask = playerCategory
         player.physicsBody? .contactTestBitMask = traficCarCategory
+        
+        // Add Score Label
+        metricLabel.verticalAlignmentMode = .top
+        metricLabel.horizontalAlignmentMode = .center
+        metricLabel.position = CGPoint(x: self.size.width * 0.25, y: self.size.height * 0.95)
+        metricLabel.fontSize = 30
+        metricLabel.fontName = "Rockwell-Bold"
+        metricLabel.fontColor = .black
+        metricLabel.zPosition = 5
+        addChild(metricLabel)
         
         // Add player
         addChild(player)
@@ -61,12 +90,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if gameStatus != .over {
             moveScene()
         }
+        
+        if gameStatus == .running {
+            meters += 1
+            
+            if meters == 100 {
+                score += 1
+                meters = 0
+                gameSpeed *= 1.01
+            }
+        }
     }
     
     func moveScene() {
         // Make road move
-        road1.position = CGPoint(x: road1.position.x, y: road1.position.y - 5)
-        road2.position = CGPoint(x: road2.position.x, y: road2.position.y - 5)
+        road1.position = CGPoint(x: road1.position.x, y: road1.position.y - (gameSpeed * 0.8))
+        road2.position = CGPoint(x: road2.position.x, y: road2.position.y - (gameSpeed * 0.8))
         
         // Check road position
         if road1.position.y < -road1.size.height {
@@ -80,7 +119,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Move trafic
         for carNode in self.children where carNode.name == "car" {
             if let carSprite = carNode as? SKSpriteNode {
-                carSprite.position = CGPoint(x: carSprite.position.x, y: carSprite.position.y - 1)
+                carSprite.position = CGPoint(x: carSprite.position.x, y: carSprite.position.y - (gameSpeed * 0.5))
                 
                 if carSprite.position.y < -carSprite.size.height * 0.5 {
                     carSprite.removeFromParent()
@@ -111,7 +150,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // MARK: Trafic
     func addCar(position: CGPoint) {
-        let carTexture = SKTexture (imageNamed: "myCar")
+        let carTexture = SKTexture (imageNamed: carArray[Int.random(in: 0...carArray.endIndex - 1)])
         let car = SKSpriteNode(texture: carTexture)
         car.name = "car"
         car.position = position
@@ -134,7 +173,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func startCreateCar() {
-        let waitAct = SKAction.wait(forDuration: 6.5, withRange: 1.0)
+        let waitAct = SKAction.wait(forDuration: Double.random(in: 3.0...5.0), withRange: 1.1)
         let generateCarAct = SKAction.run {
             self.createRandomCar()
         }
@@ -153,7 +192,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     // MARK: Game Over
-    
     func gameOver() {
         
         let explosion = SKEmitterNode(fileNamed: "Explosion")
