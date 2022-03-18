@@ -17,12 +17,11 @@ class GameScene: SKScene {
     var carAtLeft = true
     
     enum GameStatus {
-        case idle
         case running
         case over
     }
 
-    var gameStatus: GameStatus = .idle
+    var gameStatus: GameStatus = .running
     
     override func didMove(to view: SKView) {
         
@@ -39,11 +38,13 @@ class GameScene: SKScene {
         
         // Add player
         addChild(player)
-        shuffle()
+        startGame()
     }
     
     override func update(_ currentTime: TimeInterval) {
-        moveScene()
+        if gameStatus != .over {
+            moveScene()
+        }
     }
     
     func moveScene() {
@@ -58,6 +59,17 @@ class GameScene: SKScene {
         
         if road2.position.y < -road2.size.height {
             road2.position = CGPoint(x: road2.position.x, y: road1.position.y + road1.size.height)
+        }
+        
+        // Move trafic
+        for carNode in self.children where carNode.name == "car" {
+            if let carSprite = carNode as? SKSpriteNode {
+                carSprite.position = CGPoint(x: carSprite.position.x, y: carSprite.position.y - 1)
+                
+                if carSprite.position.y < -carSprite.size.height * 0.5 {
+                    carSprite.removeFromParent()
+                }
+            }
         }
     }
     
@@ -75,16 +87,41 @@ class GameScene: SKScene {
         }
     }
     
-    func shuffle() {
-        gameStatus = .idle
-        player.position = CGPoint(x: self.size.width * 0.35, y: self.size.height * 0.15)
-    }
-    
     func startGame() {
-        gameStatus = .running
+        player.position = CGPoint(x: self.size.width * 0.35, y: self.size.height * 0.15)
+        //gameStatus = .running
+        startCreateCar()
     }
     
     func gameOver() {
         gameStatus = .over
     }
+    
+    
+    // MARK: Trafic
+    func addCar(position: CGPoint) {
+        let carTexture = SKTexture (imageNamed: "myCar")
+        let car = SKSpriteNode(texture: carTexture)
+        car.name = "car"
+        car.position = position
+        addChild(car)
+    }
+    
+    func createRandomCar() {
+        let position = [
+            CGPoint(x: self.size.width * 0.65, y: self.size.height + 150),
+            CGPoint(x: self.size.width * 0.35, y: self.size.height + 150)
+        ]
+        let carSide = Int.random(in: 0...1)
+        addCar(position: position[carSide])
+    }
+    
+    func startCreateCar() {
+        let waitAct = SKAction.wait(forDuration: 6.5, withRange: 1.0)
+        let generateCarAct = SKAction.run {
+            self.createRandomCar()
+        }
+        run(SKAction.repeatForever(SKAction.sequence([waitAct, generateCarAct])), withKey: "createCar")
+    }
+    
 }
