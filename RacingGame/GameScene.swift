@@ -8,7 +8,7 @@
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var player = SKSpriteNode(imageNamed: "whiteCar")
     var road1 = SKSpriteNode(imageNamed: "road")
@@ -16,25 +16,41 @@ class GameScene: SKScene {
     var carAtRight = false
     var carAtLeft = true
     
+    var gameOverPicture = SKSpriteNode(imageNamed: "gameOver")
+    
     enum GameStatus {
         case running
         case over
     }
-
+    
     var gameStatus: GameStatus = .running
     
     override func didMove(to view: SKView) {
         
+        // Set physics
+        self.physicsBody = SKPhysicsBody (edgeLoopFrom: self.frame)
+        self.physicsWorld.contactDelegate = self
+        
         // Set road
         road1.size = self.frame.size
+        road1.zPosition = 1
         road1.anchorPoint = CGPoint(x: 0, y: 0)
         road1.position = CGPoint(x: 0, y: 0)
         addChild(road1)
         
         road2.size = self.frame.size
+        road1.zPosition = 1
         road2.anchorPoint = CGPoint(x: 0, y: 0)
         road2.position = CGPoint(x: 0, y: road1.size.height)
         addChild(road2)
+        
+        player.zPosition = 2
+        // Phusic configuration
+        
+        player.physicsBody = SKPhysicsBody(texture: player.texture!, size: player.size)
+        player.physicsBody? .allowsRotation = false // Запретить вращение
+        player.physicsBody? .categoryBitMask = playerCategory // Установить физическую метку птицы
+        player.physicsBody? .contactTestBitMask = traficCarCategory // Установить физическое тело, которое может обнаруживать столкновения птиц
         
         // Add player
         addChild(player)
@@ -76,11 +92,11 @@ class GameScene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for _ in touches {
             if carAtLeft {
-                player.position = CGPoint(x: self.size.width * 0.65, y: self.size.height * 0.15) // Right position
+                player.position = CGPoint(x: self.size.width * 0.65, y: player.position.y) // Right position
                 carAtLeft = false
                 carAtRight = true
             } else {
-                player.position = CGPoint(x: self.size.width * 0.35, y: self.size.height * 0.15) // Left position
+                player.position = CGPoint(x: self.size.width * 0.35, y: player.position.y) // Left position
                 carAtLeft = true
                 carAtRight = false
             }
@@ -88,15 +104,10 @@ class GameScene: SKScene {
     }
     
     func startGame() {
-        player.position = CGPoint(x: self.size.width * 0.35, y: self.size.height * 0.15)
-        //gameStatus = .running
+        player.position = CGPoint(x: self.size.width * 0.35, y: self.size.height * 0.08)
         startCreateCar()
+        removeTrafic()
     }
-    
-    func gameOver() {
-        gameStatus = .over
-    }
-    
     
     // MARK: Trafic
     func addCar(position: CGPoint) {
@@ -104,6 +115,12 @@ class GameScene: SKScene {
         let car = SKSpriteNode(texture: carTexture)
         car.name = "car"
         car.position = position
+        car.zPosition = 3
+        
+        car.physicsBody = SKPhysicsBody(texture: carTexture, size: car.size)
+        car.physicsBody?.isDynamic = false
+        car.physicsBody?.categoryBitMask = traficCarCategory
+        
         addChild(car)
     }
     
@@ -124,4 +141,63 @@ class GameScene: SKScene {
         run(SKAction.repeatForever(SKAction.sequence([waitAct, generateCarAct])), withKey: "createCar")
     }
     
+    func stopCreateCar() {
+        self.removeAction(forKey: "createCar")
+    }
+    
+    func removeTrafic() {
+        for car in self.children where car.name == "car" {
+            car.removeFromParent()
+        }
+    }
+    
+    
+    // MARK: Game Over
+    
+    func gameOver() {
+        
+        let explosion = SKEmitterNode(fileNamed: "Explosion")
+        if let explosion = explosion {
+            explosion.position = player.position
+            explosion.zPosition = 4
+            addChild(explosion)
+        }
+        
+        player.removeFromParent()
+        gameStatus = .over
+        stopCreateCar()
+        
+        isUserInteractionEnabled = false
+        
+        gameOverPicture.zPosition = 4
+        addChild(gameOverPicture)
+        
+        gameOverPicture.position = CGPoint(x: self.size.width * 0.5, y: self.size.height)
+        
+        gameOverPicture.run(SKAction.move(by: CGVector(dx:0, dy: -self.size.height * 0.5), duration: 0.5), completion: {
+            self.isUserInteractionEnabled = true
+        })
+    }
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        if gameStatus != .running { return }
+        
+        var bodyA: SKPhysicsBody
+        var bodyB: SKPhysicsBody
+        
+        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
+            bodyA = contact.bodyA
+            bodyB = contact.bodyB
+        } else {
+            bodyA = contact.bodyB
+            bodyB = contact.bodyA
+        }
+        
+        if (bodyA.categoryBitMask == playerCategory && bodyB.categoryBitMask == traficCarCategory) {
+            gameOver()
+        }
+    }
 }
+
+let playerCategory: UInt32 = 0x1 << 0
+let traficCarCategory: UInt32 = 0x1 << 1
