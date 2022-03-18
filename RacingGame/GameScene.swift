@@ -45,12 +45,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(road2)
         
         player.zPosition = 2
-        // Phusic configuration
         
+        // Phusic configuration
         player.physicsBody = SKPhysicsBody(texture: player.texture!, size: player.size)
-        player.physicsBody? .allowsRotation = false // Запретить вращение
-        player.physicsBody? .categoryBitMask = playerCategory // Установить физическую метку птицы
-        player.physicsBody? .contactTestBitMask = traficCarCategory // Установить физическое тело, которое может обнаруживать столкновения птиц
+        player.physicsBody? .allowsRotation = false
+        player.physicsBody? .categoryBitMask = playerCategory
+        player.physicsBody? .contactTestBitMask = traficCarCategory
         
         // Add player
         addChild(player)
