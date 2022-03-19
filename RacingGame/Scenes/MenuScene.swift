@@ -61,7 +61,9 @@ class MenuScene: SKScene {
             
             if atPoint(touchLocation).name == "settings" {
                 if let view = self.view {
-                    print("Settings")
+                    let settingsScene = SettingsScene (size: view.bounds.size)
+                    settingsScene.scaleMode = .aspectFill
+                    view.presentScene(settingsScene, transition: SKTransition.crossFade(withDuration: TimeInterval(0.5)))
                 }
             }
             

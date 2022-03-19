@@ -16,6 +16,7 @@
 		31ECC0D127E501B0000EA695 /* Explosion.sks in Resources */ = {isa = PBXBuildFile; fileRef = 31ECC0D027E501AF000EA695 /* Explosion.sks */; };
 		31ECC0D627E5146A000EA695 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31ECC0D527E5146A000EA695 /* MenuScene.swift */; };
 		31ECC0D827E517E8000EA695 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31ECC0D727E517E8000EA695 /* Settings.swift */; };
+		31ECC0DA27E54A60000EA695 /* SettingsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31ECC0D927E54A60000EA695 /* SettingsScene.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +30,7 @@
 		31ECC0D027E501AF000EA695 /* Explosion.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Explosion.sks; sourceTree = "<group>"; };
 		31ECC0D527E5146A000EA695 /* MenuScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
 		31ECC0D727E517E8000EA695 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		31ECC0D927E54A60000EA695 /* SettingsScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScene.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,10 +63,9 @@
 		31A626EC27E3CDC5003940A4 /* RacingGame */ = {
 			isa = PBXGroup;
 			children = (
+				31ECC0DB27E54A67000EA695 /* Scenes */,
 				31ECC0D227E501C2000EA695 /* Resources */,
 				31A626ED27E3CDC5003940A4 /* AppDelegate.swift */,
-				31ECC0D527E5146A000EA695 /* MenuScene.swift */,
-				31A626F327E3CDC5003940A4 /* GameScene.swift */,
 				31A626F527E3CDC5003940A4 /* GameViewController.swift */,
 				31A626F727E3CDC5003940A4 /* Main.storyboard */,
 				31A626FC27E3CDC6003940A4 /* LaunchScreen.storyboard */,
@@ -80,6 +81,16 @@
 				31A626FA27E3CDC6003940A4 /* Assets.xcassets */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		31ECC0DB27E54A67000EA695 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				31ECC0D927E54A60000EA695 /* SettingsScene.swift */,
+				31ECC0D527E5146A000EA695 /* MenuScene.swift */,
+				31A626F327E3CDC5003940A4 /* GameScene.swift */,
+			);
+			path = Scenes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -157,6 +168,7 @@
 				31A626F427E3CDC5003940A4 /* GameScene.swift in Sources */,
 				31ECC0D627E5146A000EA695 /* MenuScene.swift in Sources */,
 				31A626F627E3CDC5003940A4 /* GameViewController.swift in Sources */,
+				31ECC0DA27E54A60000EA695 /* SettingsScene.swift in Sources */,
 				31A626EE27E3CDC5003940A4 /* AppDelegate.swift in Sources */,
 				31ECC0D827E517E8000EA695 /* Settings.swift in Sources */,
 			);

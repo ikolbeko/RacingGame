@@ -10,7 +10,8 @@ import GameplayKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
-    var player = SKSpriteNode(imageNamed: "whiteCar")
+    let gameSettings = Settings.sharedInstance
+    var player = SKSpriteNode()
     var road1 = SKSpriteNode(imageNamed: "road")
     var road2 = SKSpriteNode(imageNamed: "road")
     var metricLabel = SKLabelNode(text: "Score: 0")
@@ -24,15 +25,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    let carArray = [
-        "car1",
-        "car2",
-        "car3",
-        "car4",
-        "car5",
-        "car6",
-        "car7"
-    ]
+    let carArray = Settings.sharedInstance.carArray
     
     
     var gameOverPicture = SKSpriteNode(imageNamed: "gameOver")
@@ -63,6 +56,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         road2.position = CGPoint(x: 0, y: road1.size.height)
         addChild(road2)
         
+        player = SKSpriteNode(imageNamed: gameSettings.playerCar)
         player.zPosition = 2
         
         // Phusic Configuration
