@@ -11,6 +11,7 @@ import SpriteKit
 class SettingsScene: SKScene {
     let gameSettings = Settings.sharedInstance
     var playerCar = SKSpriteNode()
+    var level = SKLabelNode()
     
     override func didMove(to view: SKView) {
         gameSettings.highScore = UserDefaults().integer(forKey: "GameHighScore")
@@ -30,7 +31,8 @@ class SettingsScene: SKScene {
     
     override func update(_ currentTime: TimeInterval) {
         // Level Label
-        let level = SKLabelNode(text: "Hard")
+        level.removeFromParent()
+        level = SKLabelNode(text: gameSettings.level)
         level.name = "level"
         level.fontSize = 40
         level.fontName = "Rockwell-Bold"
@@ -54,7 +56,7 @@ class SettingsScene: SKScene {
             
             let touchLocation = touch.location(in: self)
             if atPoint(touchLocation).name == "level" {
-                print("level")
+                gameSettings.changeLevel()
             }
             
             if atPoint(touchLocation).name == "playerCar" {

@@ -16,7 +16,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var road2 = SKSpriteNode(imageNamed: "road")
     var metricLabel = SKLabelNode(text: "Score: 0")
     var meters = 0
-    var gameSpeed = 8.0
+    lazy var gameSpeed = level
     var carAtRight = false
     var carAtLeft = true
     var score = 0 {
@@ -24,6 +24,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             metricLabel.text = "Score: \(score)"
         }
     }
+    var level: Double {
+        switch gameSettings.level {
+        case "easy": return 10
+        case "medium": return 15
+        case "hard": return 20
+        default: return 5
+        }
+    }
+    
     
     let carArray = Settings.sharedInstance.carArray
     
@@ -195,6 +204,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // MARK: Game Over
     func gameOver() {
+        
+        if gameSettings.highScore < score {
+            gameSettings.highScore = score
+            UserDefaults.standard.set(gameSettings.highScore, forKey: "GameHighScore")
+        }
         
         let explosion = SKEmitterNode(fileNamed: "Explosion")
         if let explosion = explosion {

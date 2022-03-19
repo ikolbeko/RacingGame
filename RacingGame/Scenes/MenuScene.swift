@@ -12,7 +12,7 @@ class MenuScene: SKScene {
     let gameSettings = Settings.sharedInstance
     
     override func didMove(to view: SKView) {
-        gameSettings.highScore = UserDefaults().integer(forKey: "GameHighScore")
+        gameSettings.highScore = UserDefaults.standard.integer(forKey: "GameHighScore")
         
         // Start Game Label
         let startGame = SKLabelNode(text: "Start Game")

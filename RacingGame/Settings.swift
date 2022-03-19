@@ -13,9 +13,10 @@ class Settings {
     private init() {}
     var highScore = 0
     
-    var playerCar = "car2"
+    var playerCar = "car1"
+    var level = "medium"
     
-    //let
+    let levelArray = ["easy", "medium", "hard"]
     
     let carArray = [
         "car1",
@@ -29,14 +30,25 @@ class Settings {
     ]
     
     func changePlayerCar() {
-        for (index, value) in carArray.enumerated() {
-            if playerCar == value && value != carArray.last {
-                playerCar = carArray[index + 1]
+        playerCar = change(array: carArray, varible: playerCar)
+    }
+    
+    func changeLevel() {
+        level = change(array: levelArray, varible: level)
+    }
+    
+    private func change(array: [String], varible: String) -> String {
+        var temp = varible
+        
+        for (index, value) in array.enumerated() {
+            if varible == value && value != array.last {
+                temp = array[index + 1]
                 break
             }
-            if value == carArray.last {
-                playerCar = carArray[0]
+            if value == array.last {
+                temp = array[0]
             }
         }
+        return temp
     }
 }
