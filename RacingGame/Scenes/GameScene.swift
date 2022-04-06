@@ -18,7 +18,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var metricLabel = SKLabelNode(text: NSLocalizedString("Score: ", comment: "Score: ") + "0")
     var meters = 0
     lazy var gameSpeed = level
-    var carAtRight = false
     var carAtLeft = true
     var score = 0 {
         didSet {
@@ -32,7 +31,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         case .hard: return 20
         }
     }
-    
+    let playerCategory: UInt32 = 0x1 << 0
+    let traficCarCategory: UInt32 = 0x1 << 1
     
     let carArray = Settings.sharedInstance.carArray
     
@@ -113,7 +113,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if road1.position.y < -road1.size.height {
             road1.position = CGPoint(x: road1.position.x, y: road2.position.y + road2.size.height)
         }
-        
         if road2.position.y < -road2.size.height {
             road2.position = CGPoint(x: road2.position.x, y: road1.position.y + road1.size.height)
         }
@@ -135,11 +134,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if carAtLeft {
                 player.position = CGPoint(x: self.size.width * 0.65, y: player.position.y) // Right position
                 carAtLeft = false
-                carAtRight = true
             } else {
                 player.position = CGPoint(x: self.size.width * 0.35, y: player.position.y) // Left position
                 carAtLeft = true
-                carAtRight = false
             }
             
             if gameStatus == .over {
@@ -200,7 +197,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    
     // MARK: Game Over
     func gameOver() {
         
@@ -251,6 +247,3 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
 }
-
-let playerCategory: UInt32 = 0x1 << 0
-let traficCarCategory: UInt32 = 0x1 << 1
