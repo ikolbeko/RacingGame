@@ -180,7 +180,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func startCreateCar() {
-        let waitAct = SKAction.wait(forDuration: Double.random(in: 3.0...5.0), withRange: 1.1)
+        let waitAct = SKAction.wait(forDuration: Double.random(in: 1.0...2.0), withRange: 1.1)
         let generateCarAct = SKAction.run {
             self.createRandomCar()
         }
