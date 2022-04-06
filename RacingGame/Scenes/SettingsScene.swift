@@ -12,12 +12,22 @@ class SettingsScene: SKScene {
     let gameSettings = Settings.sharedInstance
     var playerCar = SKSpriteNode()
     var level = SKLabelNode()
+    var levelText: String {
+        switch Settings.sharedInstance.level {
+        case .easy:
+            return NSLocalizedString("Easy", comment: "Easy")
+        case .medium:
+            return NSLocalizedString("Medium", comment: "Medium")
+        case .hard:
+            return NSLocalizedString("Hard", comment: "Hard")
+        }
+    }
+    let backToMenuText = NSLocalizedString("Back", comment: "backToMenuText")
+
     
     override func didMove(to view: SKView) {
-        gameSettings.highScore = UserDefaults().integer(forKey: "GameHighScore")
-        
         // Back to menu Label
-        let back = SKLabelNode(text: "Back")
+        let back = SKLabelNode(text: backToMenuText)
         back.name = "back"
         back.fontSize = 35
         back.fontName = "Rockwell-Bold"
@@ -32,7 +42,7 @@ class SettingsScene: SKScene {
     override func update(_ currentTime: TimeInterval) {
         // Level Label
         level.removeFromParent()
-        level = SKLabelNode(text: gameSettings.level)
+        level = SKLabelNode(text: levelText)
         level.name = "level"
         level.fontSize = 40
         level.fontName = "Rockwell-Bold"
@@ -72,4 +82,6 @@ class SettingsScene: SKScene {
             }
         }
     }
+    
+    
 }

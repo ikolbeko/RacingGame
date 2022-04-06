@@ -12,24 +12,26 @@ class MenuScene: SKScene {
     let gameSettings = Settings.sharedInstance
     
     override func didMove(to view: SKView) {
-        gameSettings.highScore = UserDefaults.standard.integer(forKey: "GameHighScore")
+        let startGameText = NSLocalizedString("Start Game", comment: "Start Game")
+        let settingsText = NSLocalizedString("Settings", comment: "Settings")
+        let bestScoreText = NSLocalizedString("Best Score: ", comment: "Best Score: ")
         
         // Start Game Label
-        let startGame = SKLabelNode(text: "Start Game")
+        let startGame = SKLabelNode(text: startGameText)
         startGame.name = "startGame"
         startGame.fontSize = 45
         startGame.fontName = "Rockwell-Bold"
         startGame.fontColor = .red
         
         // Settings Label
-        let settings = SKLabelNode(text: "Settings")
+        let settings = SKLabelNode(text: settingsText)
         settings.name = "settings"
         settings.fontSize = 35
         settings.fontName = "Rockwell-Bold"
         settings.fontColor = .gray
         
         // Best Score Label
-        let bestScore = SKLabelNode(text: "Best Score: \(gameSettings.highScore)")
+        let bestScore = SKLabelNode(text: bestScoreText + "\(gameSettings.highScore)")
         bestScore.fontName = "Rockwell-Bold"
         bestScore.fontColor = .gray
         bestScore.fontSize = 25

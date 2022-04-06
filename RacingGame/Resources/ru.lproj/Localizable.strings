@@ -1,0 +1,21 @@
+/* 
+  Localizable.strings
+  RacingGame
+
+  Created by Илья Колбеко on 6.04.22.
+  
+*/
+
+// Main Menu
+"Start Game" = "Начать игру";
+"Settings" = "Настройки";
+"Best Score: " = "Лучший результат: ";
+
+// Settings
+"Back" = "Назад";
+"Easy" = "Легко";
+"Medium" = "Средне";
+"Hard" = "Тяжело";
+
+// Game
+"Score: " = "Счет: ";

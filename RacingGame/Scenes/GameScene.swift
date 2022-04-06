@@ -10,32 +10,31 @@ import GameplayKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
+    let scoreText = NSLocalizedString("Score: ", comment: "Score: ")
     let gameSettings = Settings.sharedInstance
     var player = SKSpriteNode()
     var road1 = SKSpriteNode(imageNamed: "road")
     var road2 = SKSpriteNode(imageNamed: "road")
-    var metricLabel = SKLabelNode(text: "Score: 0")
+    var metricLabel = SKLabelNode(text: NSLocalizedString("Score: ", comment: "Score: ") + "0")
     var meters = 0
     lazy var gameSpeed = level
     var carAtRight = false
     var carAtLeft = true
     var score = 0 {
         didSet {
-            metricLabel.text = "Score: \(score)"
+            metricLabel.text = NSLocalizedString("Score: ", comment: "Score: ") + "\(score)"
         }
     }
     var level: Double {
         switch gameSettings.level {
-        case "easy": return 10
-        case "medium": return 15
-        case "hard": return 20
-        default: return 5
+        case .easy: return 10
+        case .medium: return 15
+        case .hard: return 20
         }
     }
     
     
     let carArray = Settings.sharedInstance.carArray
-    
     
     var gameOverPicture = SKSpriteNode(imageNamed: "gameOver")
     

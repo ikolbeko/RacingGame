@@ -8,15 +8,28 @@
 import Foundation
 
 class Settings {
+    
+    enum Level: String {
+        case easy = "easy"
+        case medium = "medium"
+        case hard = "hard"
+    }
+    
     static let sharedInstance = Settings()
     
-    private init() {}
+    private init() {
+        if let levelRawValue = UserDefaults().string(forKey: "level") {
+            level = Level(rawValue: levelRawValue) ?? .easy
+        }
+        if let playerCarUD = UserDefaults().string(forKey: "playerCar") {
+            playerCar = playerCarUD
+        }
+        highScore = UserDefaults().integer(forKey: "GameHighScore")
+    }
     var highScore = 0
     
     var playerCar = "car1"
-    var level = "medium"
-    
-    let levelArray = ["easy", "medium", "hard"]
+    var level: Level = .easy
     
     let carArray = [
         "car1",
@@ -31,10 +44,19 @@ class Settings {
     
     func changePlayerCar() {
         playerCar = change(array: carArray, varible: playerCar)
+        UserDefaults.standard.set(playerCar, forKey: "playerCar")
     }
     
     func changeLevel() {
-        level = change(array: levelArray, varible: level)
+        switch level {
+        case .easy:
+            level = .medium
+        case .medium:
+            level = .hard
+        case .hard:
+            level = .easy
+        }
+        UserDefaults.standard.set(level.rawValue, forKey: "level")
     }
     
     private func change(array: [String], varible: String) -> String {
