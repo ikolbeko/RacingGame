@@ -32,14 +32,7 @@ class SettingsScene: SKScene {
         back.fontSize = 35
         back.fontName = "Rockwell-Bold"
         back.fontColor = .gray
-
-        // Set Label Position
-        back.position = CGPoint(x: self.size.width * 0.5, y: self.size.height * 0.1)
-
-        addChild(back)
-    }
-    
-    override func update(_ currentTime: TimeInterval) {
+        
         // Level Label
         level.removeFromParent()
         level = SKLabelNode(text: levelText)
@@ -54,11 +47,19 @@ class SettingsScene: SKScene {
         playerCar.name = "playerCar"
         playerCar.zPosition = 1
         
+        // Set Position
+        back.position = CGPoint(x: self.size.width * 0.5, y: self.size.height * 0.1)
         level.position = CGPoint(x: self.size.width * 0.5, y: self.size.height * 0.7)
         playerCar.position = CGPoint(x: self.size.width * 0.5, y: self.size.height * 0.45)
-        
+
+        addChild(back)
         addChild(level)
         addChild(playerCar)
+    }
+    
+    override func update(_ currentTime: TimeInterval) {
+        level.text = levelText
+        playerCar.texture = SKTexture(imageNamed: gameSettings.playerCar)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
